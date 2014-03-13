@@ -170,6 +170,7 @@ angular.module('musicApp')
     };
 
     $scope.liked = function(beacon) {
+    	beacon.isLiked = true;
     	console.log("liked");
 		$http({
 	        url: $rootScope.url + "user/" + $scope.$storage.email + "/liked/" +  beacon.uuid,
