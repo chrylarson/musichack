@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-sm-12 pull-right">
-     <div class="pull-right">{{$storage.email}}</div>
+     <div class="pull-right"><a href="#start">{{$storage.email}}</a></div>
   </div>
 </div>
 <div class="row">
@@ -10,14 +10,13 @@
       <div class="panel-body">
         <div class="row">
           <div class="col-sm-12">
-          <h3>{{beacon.headline}}</h3>
-          <i class="glyphicon glyphicon-star" ng-show="modalBeacon.isLiked"></i>
+          <h3>{{beacon.headline}} <i class="glyphicon glyphicon-star" ng-show="beacon.isLiked"></i></h3> 
           </div>
         </div>
         <div class="row">
           <div class="col-sm-12">
               <img ng-src="{{beacon.image}}" />
-              <i class="glyphicon glyphicon-star" ng-show="beacon.isLiked"></i>
+              
               <button class="btn btn-default pull-right" data-toggle="modal" ng-click="modalOpen(beacon)" data-target="#myModal">
                 <i class="glyphicon glyphicon-resize-full"></i>
               </button>
@@ -25,7 +24,7 @@
           </div>
           <div class="row">
             <div class="col-sm-12">
-              {{beacon.spotify_track_id}}
+              <div ng-include="beacon.spotify_track_id"></div>
             </div>
           </div>
         </div>
@@ -38,13 +37,21 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close pull-right" data-dismiss="modal" aria-hidden="true"><i class="glyphicon glyphicon-remove"></i></button>
-        <h4 class="modal-title">Band: {{modalBeacon.headline}}</h4>
+        <h4 class="modal-title">{{modalBeacon.headline}} <i class="glyphicon glyphicon-star" ng-show="modalBeacon.isLiked"></i></h4>
       </div>
       <div class="modal-body">
-        {{modalBeacon.spotify_track_id}}
+        <div class="row">
+          <div class="col-sm-12">
+            <img ng-src="{{modalBeacon.image}}" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+             <a href="modalBeacon.bands_in_town" ng-show="modalBeacon.bands_in_town">Tour Schedule</a>
+          </div>
+        </div>
       </div>
       <div class="modal-footer">
-        <i class="glyphicon glyphicon-star" ng-show="modalBeacon.isLiked"></i>
         <button type="button" class="btn btn-default" ng-click="liked(modalBeacon)" ng-hide="modalBeacon.isLiked"><i class="glyphicon glyphicon-star"></i></button>
         <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="modalClose()"><i class="glyphicon glyphicon-remove"></i></button>
       </div>

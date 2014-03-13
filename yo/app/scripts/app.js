@@ -8,7 +8,7 @@ angular.module('musicApp', [
   'fsCordova',
   'ngStorage'
 ])
-  .config(function ($routeProvider) {
+  .config(function ($routeProvider, $sceDelegateProvider) {
     $routeProvider
       .when('/', {
         templateUrl: 'views/main.html',
@@ -21,6 +21,11 @@ angular.module('musicApp', [
       .otherwise({
         redirectTo: '/'
       });
+
+      $sceDelegateProvider.resourceUrlWhitelist([
+       'self',
+       "https://embed.spotify.com/**"
+      ]);
   })
 
   .run(['$rootScope', '$location', '$localStorage', '$sessionStorage',  function ($rootScope, $location, $localStorage, $sessionStorage) {

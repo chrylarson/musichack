@@ -7,9 +7,9 @@ angular.module('musicApp')
   	$scope.modalBeacon = {};
   	$scope.modal = false;
 
-  	$scope.timeline = [{"headline":"Hey","advertisement":"sfdsfsadfsaf","uuid":"asdf","major":"adsf","minor":"adsf","power":"adsff"}];
+  	$scope.timeline = [{"headline":"Band Name","spotify_track_id":"<iframe src='https://embed.spotify.com/?uri=spotify:track:1o22EcqsCANhwYdaNOSdwS' width='250' height='80' frameborder='0' allowtransparency='true'></iframe>", "advertisement":"sfdsfsadfsaf","uuid":"asdf","major":"adsf","minor":"adsf","power":"adsff"}];
 
-  	//timeline();
+  	timeline();
 
     console.log("Woot Start main");
     CordovaService.ready.then(function() {
@@ -160,12 +160,13 @@ angular.module('musicApp')
     $scope.liked = function(beacon) {
     	console.log("liked");
 		$http({
-	        url: $rootScope.url + "user/" + $scope.$storage.email + "/liked/" +  beacon.major + "-" + beacon.minor,
+	        url: $rootScope.url + "user/" + $scope.$storage.email + "/liked/" +  beacon.uuid,
 	        method: "PUT",
 	        timeout: 10000,
 	        headers: {'Content-Type': 'application/json'}
 	    }).success(function(data) {
 	    	console.log(data);
+	    	timeline();
 	        }).error(function(data, status) {
 	        	console.log("failed visit");
 	        });
