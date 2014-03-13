@@ -25,13 +25,12 @@ angular.module('musicApp', [
 
   .run(['$rootScope', '$location', '$localStorage', '$sessionStorage',  function ($rootScope, $location, $localStorage, $sessionStorage) {
         $rootScope.$storage = $localStorage;
+        $rootScope.url = "http://sxsw.joehack3r.com:3000/";
         console.log($rootScope.$storage.email);
-        $rootScope.$on("$routeChangeStart", function (event, next, current) {
           if (typeof $rootScope.$storage.email !== 'undefined') {
-              $location.path('');
+            $location.path('');
           }
           else {
-              $location.path('/start');
+            $location.path('/start');
           }
-        });
     }]);

@@ -1,11 +1,15 @@
 'use strict';
 
 angular.module('musicApp')
-  .controller('MainCtrl', function ($scope, $localStorage, $sessionStorage, Base64, CordovaService) {
-  	
-  	$scope.$storage = $localStorage;
+  .controller('MainCtrl', function ($rootScope, $scope, $http, $localStorage, $sessionStorage, Base64, CordovaService) {
 
-  	$scope.beacons = [{"advertisement":"sfdsfsadfsaf","uuid":"asdf","major":"adsf","minor":"adsf","power":"adsff"}];
+  	$scope.$storage = $localStorage;
+  	$scope.modalBeacon = {};
+  	$scope.modal = false;
+
+  	$scope.timeline = [{"headline":"Hey","advertisement":"sfdsfsadfsaf","uuid":"asdf","major":"adsf","minor":"adsf","power":"adsff"}];
+
+  	//timeline();
 
     console.log("Woot Start main");
     CordovaService.ready.then(function() {
@@ -56,15 +60,21 @@ angular.module('musicApp')
 
 		console.log(uuid);
 		var exists = false;
-        $scope.beacons.forEach(function (d, index) {
-            if (d.advertisement === obj.advertisement) {
-                exists = true;
-            }
-        });
-		if(exists === false ) {
-			$scope.beacons.push(obj);
+		if( Number(major) < 4 && Number(minor) < 4 ){
+			console.log(major);
+	        $scope.beacons.forEach(function (d, index) {
+	            if (d.advertisement === obj.advertisement) {
+	                exists = true;
+	            }
+	        });
+			if(exists === false ) {
+				$scope.beacons.push(obj);
+				visit(obj);
+				timeline();
+			}
+
+			$scope.$apply();
 		}
-		$scope.$apply();
 
 	  }
 	  else if (obj.status == "scanStarted")
@@ -110,11 +120,80 @@ angular.module('musicApp')
 
 	function clearScanTimeout()
 	{ 
-	    console.log("Clearing scanning timeout");
+	  console.log("Clearing scanning timeout");
 	  if (scanTimer != null)
 	  {
 	    clearTimeout(scanTimer);
 	  }
 	}
+
+    function visit(beacon) {
+		$http({
+	        url: $rootScope.url + "user/" + $scope.$storage.email + "/visited/" +  beacon.major + "-" + beacon.minor,
+	        method: "PUT",
+	        timeout: 10000,
+	        headers: {'Content-Type': 'application/json'}
+	    }).success(function(data) {
+	    	console.log("visited: " + beacon.major + "-" + beacon.minor);
+
+	        }).error(function(data, status) {
+	        	console.log("failed visit");
+
+	        });
+    };
+
+    function band(beacon) {
+		$http({
+	        url: $rootScope.url + "band/" +  beacon.major + "-" + beacon.minor,
+	        method: "GET",
+	        timeout: 10000,
+	        headers: {'Content-Type': 'application/json'}
+	    }).success(function(data) {
+	    	console.log(data);
+
+	        }).error(function(data, status) {
+	        	console.log("failed visit");
+
+	        });
+    };
+
+    $scope.liked = function(beacon) {
+    	console.log("liked");
+		$http({
+	        url: $rootScope.url + "user/" + $scope.$storage.email + "/liked/" +  beacon.major + "-" + beacon.minor,
+	        method: "PUT",
+	        timeout: 10000,
+	        headers: {'Content-Type': 'application/json'}
+	    }).success(function(data) {
+	    	console.log(data);
+	        }).error(function(data, status) {
+	        	console.log("failed visit");
+	        });
+    };
+
+    function timeline() {
+		$http({
+	        url: $rootScope.url + "user/" +  $scope.$storage.email + "/timeline",
+	        method: "GET",
+	        timeout: 10000,
+	        headers: {'Content-Type': 'application/json'}
+	    }).success(function(data) {
+	    	console.log(data);
+	    	$scope.timeline = data;
+	        }).error(function(data, status) {
+	        	console.log("failed visit");
+	        });
+    };
+
+    $scope.modalOpen = function(beacon) {
+    	console.log(beacon);
+		$scope.modalBeacon = beacon;
+		$scope.modal = true;
+    };
+
+    $scope.modalClose = function() {
+		$scope.modalBeacon = {};
+		$scope.modal = false;
+    };
 
   });
