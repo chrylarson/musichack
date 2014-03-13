@@ -1,7 +1,9 @@
 'use strict';
 
 angular.module('musicApp')
-  .controller('MainCtrl', function ($scope, Base64, CordovaService) {
+  .controller('MainCtrl', function ($scope, $localStorage, $sessionStorage, Base64, CordovaService) {
+  	
+  	$scope.$storage = $localStorage;
 
   	$scope.beacons = [{"advertisement":"sfdsfsadfsaf","uuid":"asdf","major":"adsf","minor":"adsf","power":"adsff"}];
 
