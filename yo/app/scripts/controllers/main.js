@@ -17,8 +17,8 @@ angular.module('musicApp')
 	{
 	  if (obj.status == "initialized")
 	  {
-	        console.log("Bluetooth initialized successfully, starting scan for music beacons.");
-	        window.bluetoothle.startScan(startScanSuccess, startScanError, paramsObj);
+        console.log("Bluetooth initialized successfully, starting scan for music beacons.");
+        window.bluetoothle.startScan(startScanSuccess, startScanError, paramsObj);
 	  }
 	  else
 	  {
@@ -38,10 +38,32 @@ angular.module('musicApp')
 	    console.log("Stopping scan..");
 	    window.bluetoothle.stopScan(stopScanSuccess, stopScanError);
 	    clearScanTimeout();
-	    var temp = Base64.Convert(obj.advertisement);
-	    console.log(temp);
-		console.log(obj);
-		$scope.beacons.push(obj);
+
+	    var hexUuid = Base64.Convert(obj.advertisement);
+	    var uuid = hexUuid.substring(18,50);
+	    var major = hexUuid.substring(50,54);
+	    var minor = hexUuid.substring(54,58);
+	    var power = hexUuid.substring(58,62);
+
+	    console.log(uuid + ":" + major + ":" + minor + ":" + power);
+
+		obj.uuid = uuid;
+		obj.major = major;
+		obj.minor = minor;
+		obj.power = power;
+
+		console.log(uuid);
+		var exists = false;
+        $scope.beacons.forEach(function (d, index) {
+            if (d.advertisement === obj.advertisement) {
+                exists = true;
+            }
+        });
+		if(exists === false ) {
+			$scope.beacons.push(obj);
+		}
+		$scope.$apply();
+
 	  }
 	  else if (obj.status == "scanStarted")
 	  {
@@ -59,7 +81,6 @@ angular.module('musicApp')
 	  console.log("Start scan error: " + obj.error + " - " + obj.message);
 	  window.bluetoothle.initialize(initializeSuccess, initializeError);
 	}
-
 
 	function stopScanSuccess(obj)
 	{
@@ -93,6 +114,5 @@ angular.module('musicApp')
 	    clearTimeout(scanTimer);
 	  }
 	}
-
 
   });
