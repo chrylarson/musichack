@@ -9,7 +9,7 @@ var app = {
 
     onDeviceReady: function() {
         angular.bootstrap(document, ["musicApp"]);
-        checkConnection();
+        //checkConnection();
     },
 }
 app.initialize();

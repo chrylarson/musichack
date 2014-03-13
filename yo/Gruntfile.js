@@ -326,10 +326,27 @@ module.exports = function (grunt) {
         configFile: 'karma.conf.js',
         singleRun: true
       }
-    }
+    },
+    shell: {  
+          cordova: { 
+          options: {                      // Options
+                stdout: true
+            },                             
+            command: 'cordova build' 
+          },
+          dropbox: { 
+          options: {                      // Options
+                stdout: true
+            },                             
+            command: 'cp ~/android/musichack/platforms/android/ant-build/MusicHackathon-debug.apk ~/Dropbox/angleHack/phonegap/MusicHackathon-debug.apk' 
+          }
+        }
+
   });
 
 
+
+  grunt.loadNpmTasks('grunt-shell');
   grunt.registerTask('serve', function (target) {
     if (target === 'dist') {
       return grunt.task.run(['build', 'connect:dist:keepalive']);
@@ -371,7 +388,9 @@ module.exports = function (grunt) {
     'cssmin',
     'uglify',
      'usemin',
-     'htmlmin'
+     'htmlmin',
+     'shell:cordova',
+     'shell:dropbox'
   ]);
 
   grunt.registerTask('default', [
