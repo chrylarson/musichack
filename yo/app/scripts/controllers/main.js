@@ -7,9 +7,10 @@ angular.module('musicApp')
   	$scope.modalBeacon = {};
   	$scope.modal = false;
 
-  	$scope.timeline = [{"headline":"Band Name","spotify_track_id":"<iframe src='https://embed.spotify.com/?uri=spotify:track:1o22EcqsCANhwYdaNOSdwS' width='250' height='80' frameborder='0' allowtransparency='true'></iframe>", "advertisement":"sfdsfsadfsaf","uuid":"asdf","major":"adsf","minor":"adsf","power":"adsff"}];
+  	$scope.bands = [];
+  	$scope.beacons = [];
 
-  	timeline();
+  	//timeline();
 
     console.log("Woot Start main");
     CordovaService.ready.then(function() {
@@ -59,22 +60,22 @@ angular.module('musicApp')
 		obj.power = power;
 
 		console.log(uuid);
-		var exists = false;
-		if( Number(major) < 4 && Number(minor) < 4 ){
-			console.log(major);
-	        $scope.beacons.forEach(function (d, index) {
-	            if (d.advertisement === obj.advertisement) {
-	                exists = true;
-	            }
-	        });
-			if(exists === false ) {
-				$scope.beacons.push(obj);
-				visit(obj);
-				timeline();
-			}
 
-			$scope.$apply();
+		var exists = false;
+
+        $scope.beacons.forEach(function (d, index) {
+            if (d.advertisement === obj.advertisement) {
+                exists = true;
+            }
+        });
+		if(exists === false ) {
+			$scope.beacons.push(obj);
+			visit(obj);
+			//timeline();
 		}
+
+		//$scope.$apply();
+
 
 	  }
 	  else if (obj.status == "scanStarted")
@@ -134,8 +135,19 @@ angular.module('musicApp')
 	        timeout: 10000,
 	        headers: {'Content-Type': 'application/json'}
 	    }).success(function(data) {
-	    	console.log("visited: " + beacon.major + "-" + beacon.minor);
-
+	    	console.log(data);
+	    	if(data !== 'No band info') {
+		    	var exists = false;
+		    	$scope.bands.forEach(function (d, index) {
+		            if (d.uuid === data[0].uuid) {
+		                exists = true;
+		            }
+		        });
+				if(exists === false ) {
+					$scope.bands.push(data[0]);
+					//$scope.$apply();
+				}
+			}
 	        }).error(function(data, status) {
 	        	console.log("failed visit");
 
@@ -180,7 +192,7 @@ angular.module('musicApp')
 	        headers: {'Content-Type': 'application/json'}
 	    }).success(function(data) {
 	    	console.log(data);
-	    	$scope.timeline = data;
+	    	$scope.bands = data;
 	        }).error(function(data, status) {
 	        	console.log("failed visit");
 	        });

@@ -5,7 +5,7 @@
 </div>
 <div class="row">
   <div class="col-sm-12">
-    <div ng-repeat="beacon in timeline" ng-bind-html-unsafe="beacon.spotify_track_id">
+    <div ng-repeat="beacon in bands" >
       <div class="panel panel-default">
       <div class="panel-body">
         <div class="row">
@@ -24,7 +24,7 @@
           </div>
           <div class="row">
             <div class="col-sm-12">
-              <div ng-include="beacon.spotify_track_id"></div>
+              
             </div>
           </div>
         </div>
