@@ -14,6 +14,7 @@ angular.module('musicApp')
     		$location.path('/');
     		register($scope.email);
     	}
+
     }
 
     function register(email) {

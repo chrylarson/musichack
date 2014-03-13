@@ -6,7 +6,7 @@ angular.module('musicApp')
   	$scope.$storage = $localStorage;
   	$scope.modalBeacon = {};
   	$scope.modal = false;
-
+  	$scope.scanning = false;
   	$scope.bands = [];
   	$scope.beacons = [];
 
@@ -33,6 +33,10 @@ angular.module('musicApp')
 	  }
 	}
 
+	$scope.scanNow = function() {
+		window.bluetoothle.initialize(initializeSuccess, initializeError);
+	}
+
 	function initializeError(obj)
 	{
 	  console.log("Initialize error: " + obj.error + " - " + obj.message);
@@ -40,6 +44,7 @@ angular.module('musicApp')
 
 	function startScanSuccess(obj)
 	{
+		$scope.scanning = true;
 	  if (obj.status == "scanResult")
 	  {
 	    console.log("Stopping scan..");
@@ -71,15 +76,13 @@ angular.module('musicApp')
 		if(exists === false ) {
 			$scope.beacons.push(obj);
 			visit(obj);
-			//timeline();
 		}
-
-		//$scope.$apply();
 
 
 	  }
 	  else if (obj.status == "scanStarted")
 	  {
+	  	$scope.scanning = true;
 	    console.log("Scan was started successfully, stopping in 10");
 	    scanTimer = setTimeout(scanTimeout, 10000);
 	  }
@@ -91,12 +94,14 @@ angular.module('musicApp')
 
 	function startScanError(obj)
 	{
+		$scope.scanning = false;
 	  console.log("Start scan error: " + obj.error + " - " + obj.message);
-	  window.bluetoothle.initialize(initializeSuccess, initializeError);
+	  
 	}
 
 	function stopScanSuccess(obj)
 	{
+		$scope.scanning = false;
 	  if (obj.status == "scanStopped")
 	  {
 	    console.log("Scan was stopped successfully");
@@ -110,7 +115,9 @@ angular.module('musicApp')
 
 	function stopScanError(obj)
 	{
+		$scope.scanning = false;
 	  console.log("Stop scan error: " + obj.error + " - " + obj.message);
+	  window.bluetoothle.initialize(initializeSuccess, initializeError);
 	}
 
 	function scanTimeout()
@@ -145,7 +152,6 @@ angular.module('musicApp')
 		        });
 				if(exists === false ) {
 					$scope.bands.push(data[0]);
-					//$scope.$apply();
 				}
 			}
 	        }).error(function(data, status) {
@@ -179,7 +185,7 @@ angular.module('musicApp')
 	        headers: {'Content-Type': 'application/json'}
 	    }).success(function(data) {
 	    	console.log(data);
-	    	timeline();
+	    	//timeline();
 	        }).error(function(data, status) {
 	        	console.log("failed visit");
 	        });
@@ -209,5 +215,23 @@ angular.module('musicApp')
 		$scope.modalBeacon = {};
 		$scope.modal = false;
     };
+
+    $scope.contest = function(beacon) {
+    	beacon.enteredContest = true;
+    	$http({
+	        url: $rootScope.url + "user/" + $scope.$storage.email + "/drawing/" +  beacon.uuid,
+	        method: "PUT",
+	        timeout: 10000,
+	        headers: {'Content-Type': 'application/json'}
+	    }).success(function(data) {
+	    	console.log("contest entry success");
+	        }).error(function(data, status) {
+	        	console.log("contest entry failed");
+	        });
+    }
+
+    $scope.openWebsite = function(url) {
+    	window.open(url, "_system");
+    }
 
   });
