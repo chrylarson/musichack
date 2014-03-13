@@ -1,13 +1,41 @@
-
 <div class="row">
   <div class="col-sm-12">
     <div ng-repeat="beacon in beacons">
-      {{beacon.uuid}}
-    </div>
-  </div>
-  <div class="col-sm-12">
-    <div class="footer">
-      <p>♥ from the Yeoman team</p>
+      <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-sm-12">
+          <h3>{{beacon.title}}</h3>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+              {{beacon.major}}:{{beacon.minor}}
+              <button class="btn btn-default pull-right" data-toggle="modal" data-target="#myModal">
+                <i class="glyphicon glyphicon-resize-full"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
+<div class="modal fade" id="myModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close pull-right" data-dismiss="modal" aria-hidden="true"><i class="glyphicon glyphicon-remove"></i></button>
+        <h4 class="modal-title">Band: {{beacon.title}}</h4>
+      </div>
+      <div class="modal-body">
+        <p>One fine body&hellip;</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" ><i class="glyphicon glyphicon-star"></i></button>
+        <button type="button" class="btn btn-default" ><i class="fa fa-twitter"></i></button>
+        <button type="button" class="btn btn-default" data-dismiss="modal"><i class="glyphicon glyphicon-remove"></i></button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

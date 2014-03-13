@@ -3,7 +3,7 @@
 angular.module('musicApp')
   .controller('MainCtrl', function ($scope, Base64, CordovaService) {
 
-  	$scope.beacons = [];
+  	$scope.beacons = [{"advertisement":"sfdsfsadfsaf","uuid":"asdf","major":"adsf","minor":"adsf","power":"adsff"}];
 
     console.log("Woot Start main");
     CordovaService.ready.then(function() {
