@@ -21,4 +21,17 @@ angular.module('musicApp', [
       .otherwise({
         redirectTo: '/'
       });
-  });
+  })
+
+  .run(['$rootScope', '$location', '$localStorage', '$sessionStorage',  function ($rootScope, $location, $localStorage, $sessionStorage) {
+        $rootScope.$storage = $localStorage;
+        console.log($rootScope.$storage.email);
+        $rootScope.$on("$routeChangeStart", function (event, next, current) {
+          if (typeof $rootScope.$storage.email !== 'undefined') {
+              $location.path('');
+          }
+          else {
+              $location.path('/start');
+          }
+        });
+    }]);
