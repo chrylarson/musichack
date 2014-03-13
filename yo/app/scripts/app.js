@@ -4,7 +4,8 @@ angular.module('musicApp', [
   'ngCookies',
   'ngResource',
   'ngSanitize',
-  'ngRoute'
+  'ngRoute',
+  'fsCordova'
 ])
   .config(function ($routeProvider) {
     $routeProvider
